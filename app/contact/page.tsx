@@ -32,8 +32,12 @@ export default function ContactPage() {
     //
     // For now, simulate a successful submission:
     await new Promise((r) => setTimeout(r, 1000));
-    setStatus("sent");
-    setFormData({ name: "", email: "", message: "" });
+    const res = await fetch("https://formspree.io/f/mbdpkavv", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    if (!res.ok) throw new Error("Failed to send");
     setTimeout(() => setStatus("idle"), 4000);
   }
 

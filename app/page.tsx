@@ -1,3 +1,4 @@
+import { client, homePageQuery, urlFor } from "@/lib/sanity";
 import { liveRecordings, muckSavageDescription } from "@/lib/data";
 
 function CelticKnot({ className = "" }: { className?: string }) {
@@ -24,25 +25,40 @@ function CelticKnot({ className = "" }: { className?: string }) {
   );
 }
 
-export default function HomePage() {
+// Extract SoundCloud track ID from URL for embedding
+function getSoundCloudEmbedUrl(url: string) {
+  return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23c77d3a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+}
+
+export default async function HomePage() {
+  // Fetch from Sanity, fall back to static data
+  const homePage = await client.fetch(homePageQuery).catch(() => null);
+
+  const recordings = homePage?.liveRecordings?.length
+    ? homePage.liveRecordings
+    : liveRecordings;
+
+  const description = homePage?.description?.length
+    ? null // Will use portable text if available
+    : muckSavageDescription;
+
+  const heroImageUrl = homePage?.heroImage
+    ? urlFor(homePage.heroImage).width(1920).quality(80).url()
+    : "/images/hero.jpg";
+
   return (
     <>
       {/* ─── Hero Section ─────────────────────────────────────────── */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Background layers */}
         <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink-light/80 to-ink" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(199,125,58,0.08)_0%,_transparent_70%)]" />
 
-        {/* Hero image overlay — replace src with your own hero photo */}
         <div
           className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/images/hero.jpg')",
-          }}
+          style={{ backgroundImage: `url('${heroImageUrl}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/80" />
 
-        {/* Content */}
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
           <div className="animate-fade-up">
             <CelticKnot className="w-24 h-6 mx-auto text-copper/60 mb-8" />
@@ -56,12 +72,11 @@ export default function HomePage() {
             <div className="section-divider mb-6" />
 
             <p className="font-display text-lg md:text-xl text-copper/90 italic tracking-wide">
-              [ Contemporary &amp; Traditional Irish Music ]
+              {homePage?.tagline || "[ Contemporary & Traditional Irish Music ]"}
             </p>
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
           <div className="w-[1px] h-12 bg-gradient-to-b from-copper/60 to-transparent" />
         </div>
@@ -77,33 +92,29 @@ export default function HomePage() {
           </h2>
           <div className="section-divider mb-16" />
 
-          <div className="space-y-6">
-            {liveRecordings.map((recording, i) => (
+          <div className="space-y-8">
+            {recordings.map((recording: any, i: number) => (
               <div
                 key={i}
-                className="group flex items-center gap-6 py-5 px-6 border border-peat-800/20 hover:border-copper/30 bg-ink-light/30 hover:bg-ink-light/60 transition-all duration-500 cursor-pointer"
-                style={{ animationDelay: `${i * 100}ms` }}
+                className="group py-5 px-6 border border-peat-800/20 hover:border-copper/30 bg-ink-light/30 hover:bg-ink-light/60 transition-all duration-500"
               >
-                {/* Play icon */}
-                <div className="flex-shrink-0 w-10 h-10 rounded-full border border-copper/40 group-hover:border-copper group-hover:bg-copper/10 flex items-center justify-center transition-all duration-300">
-                  <svg
-                    className="w-4 h-4 text-copper/70 group-hover:text-copper ml-0.5 transition-colors"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-display text-lg md:text-xl text-cream/80 group-hover:text-cream italic tracking-wide transition-colors">
+                <h3 className="font-display text-lg md:text-xl text-cream/80 group-hover:text-cream italic tracking-wide mb-4">
                   {recording.title}
                 </h3>
 
-                {/* Decorative line */}
-                <div className="flex-1 hidden sm:block">
-                  <div className="h-[1px] bg-gradient-to-r from-peat-800/30 to-transparent group-hover:from-copper/20 transition-colors" />
-                </div>
+                {recording.url && (
+                  <div className="w-full">
+                    <iframe
+                      width="100%"
+                      height="166"
+                      scrolling="no"
+                      frameBorder="no"
+                      allow="autoplay"
+                      src={getSoundCloudEmbedUrl(recording.url)}
+                      className="rounded opacity-90 hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -126,14 +137,16 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-6 border-l-2 border-copper/20 pl-8 md:pl-12">
-            {muckSavageDescription.map((paragraph, i) => (
-              <p
-                key={i}
-                className="font-display text-base md:text-lg leading-relaxed text-cream/70 italic"
-              >
-                {paragraph}
-              </p>
-            ))}
+            {(description || muckSavageDescription).map(
+              (paragraph: string, i: number) => (
+                <p
+                  key={i}
+                  className="font-display text-base md:text-lg leading-relaxed text-cream/70 italic"
+                >
+                  {paragraph}
+                </p>
+              )
+            )}
           </div>
         </div>
       </section>
