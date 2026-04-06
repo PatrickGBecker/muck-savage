@@ -11,7 +11,7 @@ const navLinks = [
   { href: "/past-shows", label: "Past Shows" },
 ];
 
-export default function Header({ logoUrl }: { logoUrl?: string | null }) {
+export default function Header({ footerLogoUrl }: { footerLogoUrl?: string | null }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -23,9 +23,9 @@ export default function Header({ logoUrl }: { logoUrl?: string | null }) {
           href="/"
           className="flex items-center gap-3 hover:opacity-90 transition-opacity"
         >
-          {logoUrl && (
+          {footerLogoUrl && (
             <Image
-              src={logoUrl}
+              src={footerLogoUrl}
               alt="Muck Savage logo"
               width={40}
               height={40}

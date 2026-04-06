@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Contemporary & Traditional Irish Music",
       type: "website",
       locale: "en_US",
-      url: "https://muck-savage.com",
+      url: "https://muck-savage.vercel.app",
     },
   };
 }

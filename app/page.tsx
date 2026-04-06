@@ -1,5 +1,6 @@
-import { client, homePageQuery, urlFor } from "@/lib/sanity";
+import { client, homePageQuery, siteSettingsQuery, urlFor } from "@/lib/sanity";
 import { liveRecordings, muckSavageDescription } from "@/lib/data";
+
 
 function CelticKnot({ className = "" }: { className?: string }) {
   return (
@@ -31,6 +32,8 @@ function getSoundCloudEmbedUrl(url: string) {
 
 export default async function HomePage() {
   const homePage = await client.fetch(homePageQuery).catch(() => null);
+  const settings = await client.fetch(siteSettingsQuery).catch(() => null);
+  const logoUrl = settings?.logo ? urlFor(settings.logo).height(120).url() : null;
 
   const recordings = homePage?.liveRecordings?.length
     ? homePage.liveRecordings
@@ -59,8 +62,15 @@ export default async function HomePage() {
 
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
           <div className="animate-fade-up">
-            <CelticKnot className="w-24 h-6 mx-auto text-copper/60 mb-8" />
-
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt="Muck Savage"
+                className="h-20 md:h-28 w-auto mx-auto mb-8 opacity-80"
+              />
+            ) : (
+              <CelticKnot className="w-24 h-6 mx-auto text-copper/60 mb-8" />
+            )}
             <h1 className="font-accent text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-[0.15em] uppercase text-cream text-shadow-warm mb-6">
               Muck
               <br />
