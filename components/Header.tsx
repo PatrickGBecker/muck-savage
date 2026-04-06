@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -10,7 +11,7 @@ const navLinks = [
   { href: "/past-shows", label: "Past Shows" },
 ];
 
-export default function Header() {
+export default function Header({ logoUrl }: { logoUrl?: string | null }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -20,9 +21,20 @@ export default function Header() {
         {/* Logo / Brand */}
         <Link
           href="/"
-          className="font-accent text-lg md:text-xl tracking-[0.2em] uppercase text-copper hover:text-copper-light transition-colors"
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity"
         >
-          Muck Savage
+          {logoUrl && (
+            <Image
+              src={logoUrl}
+              alt="Muck Savage logo"
+              width={40}
+              height={40}
+              className="h-8 w-auto md:h-10 object-contain"
+            />
+          )}
+          <span className="font-accent text-lg md:text-xl tracking-[0.2em] uppercase text-copper">
+            Muck Savage
+          </span>
         </Link>
 
         {/* Desktop Nav */}

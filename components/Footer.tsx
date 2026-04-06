@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const footerLinks = [
   { href: "/", label: "Home" },
@@ -7,7 +8,11 @@ const footerLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function Footer() {
+export default function Footer({
+  footerLogoUrl,
+}: {
+  footerLogoUrl?: string | null;
+}) {
   return (
     <footer className="border-t border-peat-800/30 bg-ink-light/50">
       <div className="max-w-6xl mx-auto px-6 py-16">
@@ -19,6 +24,17 @@ export default function Footer() {
           >
             Muck Savage
           </Link>
+
+          {/* Footer Logo */}
+          {footerLogoUrl && (
+            <Image
+              src={footerLogoUrl}
+              alt="Muck Savage"
+              width={80}
+              height={80}
+              className="h-16 md:h-20 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+            />
+          )}
 
           {/* Decorative line */}
           <div className="section-divider" />

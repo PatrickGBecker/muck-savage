@@ -25,13 +25,11 @@ function CelticKnot({ className = "" }: { className?: string }) {
   );
 }
 
-// Extract SoundCloud track ID from URL for embedding
 function getSoundCloudEmbedUrl(url: string) {
   return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23c77d3a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
 }
 
 export default async function HomePage() {
-  // Fetch from Sanity, fall back to static data
   const homePage = await client.fetch(homePageQuery).catch(() => null);
 
   const recordings = homePage?.liveRecordings?.length
@@ -39,7 +37,7 @@ export default async function HomePage() {
     : liveRecordings;
 
   const description = homePage?.description?.length
-    ? null // Will use portable text if available
+    ? null
     : muckSavageDescription;
 
   const heroImageUrl = homePage?.heroImage
@@ -54,10 +52,10 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(199,125,58,0.08)_0%,_transparent_70%)]" />
 
         <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center"
+          className="absolute inset-0 opacity-50 bg-cover bg-center"
           style={{ backgroundImage: `url('${heroImageUrl}')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/60" />
 
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
           <div className="animate-fade-up">
@@ -120,6 +118,34 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Featured Video ───────────────────────────────────────── */}
+      {homePage?.videoUrl && (
+        <section className="py-24 md:py-32 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ink-light/20 to-transparent" />
+
+          <div className="relative max-w-4xl mx-auto px-6">
+            <CelticKnot className="w-16 h-4 mx-auto text-copper/40 mb-6" />
+            <h2 className="font-accent text-2xl md:text-3xl tracking-[0.2em] uppercase text-center text-cream mb-4">
+              {homePage.videoTitle || "Watch Us Play"}
+            </h2>
+            <div className="section-divider mb-12" />
+
+            <div className="relative border border-copper/20 bg-ink-light/30 overflow-hidden">
+              <video
+                controls
+                playsInline
+                preload="metadata"
+                className="w-full aspect-video"
+                poster={heroImageUrl}
+              >
+                <source src={homePage.videoUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── What is a Muck Savage? ───────────────────────────────── */}
       <section className="py-24 md:py-32 relative">

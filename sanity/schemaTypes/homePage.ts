@@ -30,10 +30,25 @@ export const homePage = {
           type: "object",
           fields: [
             { name: "title", title: "Song Title", type: "string" },
-            { name: "url", title: "Audio/Video URL", type: "url" },
+            { name: "url", title: "SoundCloud URL", type: "url" },
           ],
         },
       ],
+    },
+    {
+      name: "video",
+      title: "Featured Video",
+      type: "file",
+      options: {
+        accept: "video/*",
+      },
+      description: "Upload a short video to display below the Live Recordings section.",
+    },
+    {
+      name: "videoTitle",
+      title: "Video Section Title",
+      type: "string",
+      initialValue: "Watch Us Play",
     },
   ],
 };
@@ -51,13 +66,21 @@ export const siteSettings = {
     },
     {
       name: "logo",
-      title: "Logo",
+      title: "Logo (Navbar)",
       type: "image",
+      description: "Appears next to the band name in the navigation bar.",
     },
     {
       name: "footerLogo",
       title: "Footer Logo",
       type: "image",
+      description: "Appears below the band name in the footer.",
+    },
+    {
+      name: "favicon",
+      title: "Favicon",
+      type: "image",
+      description: "Browser tab icon. If empty, the navbar logo will be used.",
     },
     {
       name: "socialLinks",

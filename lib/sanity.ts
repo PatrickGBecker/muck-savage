@@ -14,6 +14,12 @@ export function urlFor(source: any) {
   return builder.image(source);
 }
 
+// Get the file URL for uploaded assets (videos, etc.)
+export function fileUrl(ref: string) {
+  const [, id, extension] = ref.split("-");
+  return `https://cdn.sanity.io/files/i4469zmy/production/${id}.${extension}`;
+}
+
 // ─── GROQ Queries ────────────────────────────────────────────────
 export const homePageQuery = `*[_type == "homePage"][0]{
   heroImage,
@@ -22,7 +28,9 @@ export const homePageQuery = `*[_type == "homePage"][0]{
   liveRecordings[]{
     title,
     url
-  }
+  },
+  "videoUrl": video.asset->url,
+  videoTitle
 }`;
 
 export const membersQuery = `*[_type == "member"] | order(order asc){
@@ -43,5 +51,6 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   bandName,
   logo,
   footerLogo,
+  favicon,
   socialLinks
 }`;
