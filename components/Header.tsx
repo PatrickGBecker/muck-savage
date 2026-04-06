@@ -9,9 +9,10 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/past-shows", label: "Past Shows" },
+  { href: "/gallery", label: "Gallery" },
 ];
 
-export default function Header({ footerLogoUrl }: { footerLogoUrl?: string | null }) {
+export default function Header({ logoUrl }: { logoUrl?: string | null }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -23,9 +24,9 @@ export default function Header({ footerLogoUrl }: { footerLogoUrl?: string | nul
           href="/"
           className="flex items-center gap-3 hover:opacity-90 transition-opacity"
         >
-          {footerLogoUrl && (
+          {logoUrl && (
             <Image
-              src={footerLogoUrl}
+              src={logoUrl}
               alt="Muck Savage logo"
               width={40}
               height={40}
@@ -95,7 +96,7 @@ export default function Header({ footerLogoUrl }: { footerLogoUrl?: string | nul
       {/* Mobile Dropdown */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
-          menuOpen ? "max-h-80 border-t border-peat-800/30" : "max-h-0"
+          menuOpen ? "max-h-96 border-t border-peat-800/30" : "max-h-0"
         }`}
       >
         <nav className="flex flex-col px-6 py-4 gap-1 bg-ink/95 backdrop-blur-md">

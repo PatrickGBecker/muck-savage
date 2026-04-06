@@ -14,7 +14,6 @@ export function urlFor(source: any) {
   return builder.image(source);
 }
 
-// Get the file URL for uploaded assets (videos, etc.)
 export function fileUrl(ref: string) {
   const [, id, extension] = ref.split("-");
   return `https://cdn.sanity.io/files/i4469zmy/production/${id}.${extension}`;
@@ -53,4 +52,11 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   footerLogo,
   favicon,
   socialLinks
+}`;
+
+export const galleryQuery = `*[_type == "galleryImage"] | order(order asc, year desc){
+  image,
+  caption,
+  year,
+  venue
 }`;
