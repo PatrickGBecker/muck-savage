@@ -36,8 +36,8 @@ export default async function RootLayout({
 }) {
   const settings = await client.fetch(siteSettingsQuery).catch(() => null);
 
-  const logoUrl = settings?.logo
-    ? urlFor(settings.logo).height(48).url()
+  const logoUrl = settings?.footerLogo
+    ? urlFor(settings.footerLogo).height(48).url()
     : null;
 
   const footerLogoUrl = settings?.footerLogo

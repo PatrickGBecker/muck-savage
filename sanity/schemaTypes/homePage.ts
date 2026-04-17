@@ -10,6 +10,13 @@ export const homePage = {
       options: { hotspot: true },
     },
     {
+    name: "heroImageMobile",
+    title: "Hero Image (Mobile)",
+    type: "image",
+    options: { hotspot: true },
+    description: "Alternate hero image optimized for mobile/portrait screens.",
+    },
+    {
       name: "tagline",
       title: "Tagline",
       type: "string",

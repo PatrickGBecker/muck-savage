@@ -47,6 +47,10 @@ export default async function HomePage() {
     ? urlFor(homePage.heroImage).width(1920).quality(80).url()
     : "/images/hero.jpg";
 
+  const heroImageMobileUrl = homePage?.heroImageMobile
+  ? urlFor(homePage.heroImageMobile).width(800).quality(80).url()
+  : heroImageUrl;
+
   return (
     <>
       {/* ─── Hero Section ─────────────────────────────────────────── */}
@@ -54,6 +58,10 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink-light/80 to-ink" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(199,125,58,0.08)_0%,_transparent_70%)]" />
 
+        <div
+          className="absolute inset-0 opacity-20 bg-cover bg-center block md:hidden"
+          style={{ backgroundImage: `url('${heroImageMobileUrl}')` }}
+        />
         <div
           className="absolute inset-0 opacity-50 bg-cover bg-center"
           style={{ backgroundImage: `url('${heroImageUrl}')` }}
@@ -66,7 +74,7 @@ export default async function HomePage() {
               <img
                 src={logoUrl}
                 alt="Muck Savage"
-                className="h-20 md:h-28 w-auto mx-auto mb-8 opacity-80"
+                className="h-32 md:h-44 w-auto mx-auto mb-8 opacity-80"
               />
             ) : (
               <CelticKnot className="w-24 h-6 mx-auto text-copper/60 mb-8" />

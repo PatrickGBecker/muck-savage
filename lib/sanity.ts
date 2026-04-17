@@ -22,6 +22,7 @@ export function fileUrl(ref: string) {
 // ─── GROQ Queries ────────────────────────────────────────────────
 export const homePageQuery = `*[_type == "homePage"][0]{
   heroImage,
+  heroImageMobile,
   tagline,
   description,
   liveRecordings[]{
